@@ -1,0 +1,40 @@
+{
+  "port": "COM3",
+  "baudrate": 115200,
+  "databits": 8,
+  "stopbits": 1,
+  "parity": "None",
+  "font_family": "Cascadia Code",
+  "font_size": 11,
+  "theme": "dark",
+  "hex_display": false,
+  "hex_send": false,
+  "auto_scroll": false,
+  "timestamp": false,
+  "send_newline": true,
+  "newline_type": "\\r\\n",
+  "dtr": false,
+  "rts": false,
+  "cmd_history": [
+    "wifi scan",
+    "reboot"
+  ],
+  "quick_cmds": [
+    {
+      "name": "重启",
+      "cmd": "reboot"
+    },
+    {
+      "name": "帮助",
+      "cmd": "help"
+    },
+    {
+      "name": "版本",
+      "cmd": "version"
+    },
+    {
+      "name": "WiFi扫描",
+      "cmd": "wifi scan"
+    }
+  ]
+}
