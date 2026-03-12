@@ -590,6 +590,9 @@ class SerialAssistant(ctk.CTk):
 
     def _read_loop(self):
         buf = b""
+        last_flush_time = time.time()
+        FLUSH_INTERVAL = 0.1  # 100ms 无新数据时刷新缓冲区
+
         while self.running:
             try:
                 if not self.serial_port or not self.serial_port.is_open:
@@ -597,6 +600,7 @@ class SerialAssistant(ctk.CTk):
                 data = self.serial_port.read(self.serial_port.in_waiting or 1)
                 if data:
                     self.rx_count += len(data)
+                    last_flush_time = time.time()  # 有数据时重置计时器
                     if self.hex_display_var.get():
                         hex_str = " ".join(f"{b:02X}" for b in data)
                         self._schedule_insert(hex_str + " ", ["default"])
@@ -610,6 +614,12 @@ class SerialAssistant(ctk.CTk):
                             text = buf.decode("utf-8", errors="replace")
                             buf = b""
                             self._process_line(text)
+                else:
+                    # 无数据时检查是否需要刷新缓冲区
+                    if buf and (time.time() - last_flush_time) > FLUSH_INTERVAL:
+                        text = buf.decode("utf-8", errors="replace")
+                        buf = b""
+                        self._process_line(text)
             except serial.SerialException:
                 self.after(0, self._disconnect)
                 break
